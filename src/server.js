@@ -20,18 +20,6 @@ app.use(express.json());
 // API Routes
 app.use("/api", analyzeRoutes);
 
-// DB Connection
-const connectWithRetry = async () => {
-  console.log("Attempting to connect to MongoDB...");
-  const connection = await connectDB();
-  if (!connection) {
-    console.log("Retrying connection in 5 seconds...");
-    setTimeout(connectWithRetry, 5000);
-  }
-};
-
-// Connect to MongoDB with retry
-connectWithRetry();
 
 // Ensure port is correctly set for Render
 const PORT = process.env.PORT || 3000;
