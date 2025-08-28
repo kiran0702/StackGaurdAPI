@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon src/server.js",
-    "build" : "npm install --prefix backend",
-    "start": "npm run start --prefix backend"
+    "build": "npm install",
+    "start": "node src/server.js"
   },
   "keywords": [],
   "author": "",
