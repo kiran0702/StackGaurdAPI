@@ -6,6 +6,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import analyzeRoutes from "../routes/analyzeRoutes.js";
 import path from "path";
+import connectDB from "./config/db.js";
 
 dotenv.config();
 
@@ -20,20 +21,22 @@ app.use(express.json());
 app.use("/api", analyzeRoutes);
 
 // DB Connection
-const PORT = process.env.PORT || 5000;
-const MONGO_URL = process.env.MONGO_URL;
+const connectWithRetry = async () => {
+  console.log("Attempting to connect to MongoDB...");
+  const connection = await connectDB();
+  if (!connection) {
+    console.log("Retrying connection in 5 seconds...");
+    setTimeout(connectWithRetry, 5000);
+  }
+};
 
+// Connect to MongoDB with retry
+connectWithRetry();
 
-mongoose
-  .connect(MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    app.listen(PORT, () =>
-      console.log(`Server running at http://localhost:${PORT}`)
-    );
-  })
-  .catch((err) => {
-    console.error("Database connection error:", err);
-  });
+// Ensure port is correctly set for Render
+const PORT = process.env.PORT || 3000;
+
+// Make sure your app listens on the correct port
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
