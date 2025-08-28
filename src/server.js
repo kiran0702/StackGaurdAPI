@@ -5,6 +5,7 @@ import helmet from "helmet";
 import cors from "cors";
 import dotenv from "dotenv";
 import analyzeRoutes from "../routes/analyzeRoutes.js";
+import path from "path";
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use("/api", analyzeRoutes);
 // DB Connection
 const PORT = process.env.PORT || 5000;
 const MONGO_URL = process.env.MONGO_URL;
+
 
 mongoose
   .connect(MONGO_URL, {
